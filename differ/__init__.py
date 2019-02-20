@@ -8,16 +8,14 @@ DIFF_COMMAND = "meld"
 
 class ShowDiff(DirectoryPaneCommand):
     def __call__(self):
-        l_url = self.pane.get_file_under_cursor()
-        if (self.pane.get_selected_files()):
-            l_url = " ".join(self.pane.get_selected_files())
+        l_pane, r_pane = self.pane.window.get_panes()
 
-        r_url = self._get_opposite_pane().get_file_under_cursor()
-        if (self._get_opposite_pane().get_selected_files()):
-            r_url = " ".join(self._get_opposite_pane().get_selected_files())
+        l_url = l_pane.get_file_under_cursor()
+        if (l_pane.get_selected_files()):
+            l_url = " ".join(l_pane.get_selected_files())
+
+        r_url = r_pane.get_file_under_cursor()
+        if (r_pane.get_selected_files()):
+            r_url = " ".join(r_pane.get_selected_files())
 
         Popen([DIFF_COMMAND, l_url, r_url])
-
-    def _get_opposite_pane(self):
-        panes = self.pane.window.get_panes()
-        return list(filter(lambda p: p != self.pane, panes))[0]
